@@ -40,16 +40,50 @@ Matter.Runner.run(engine);
 Render.run(render);
 
 // Spawn circular boulder with texture
+let spawnModeActive = false;
+const preview = document.getElementById('preview');
+const spawnBtn = document.getElementById('spawnBtn');
+
+// Preprocess texture to circular mask
+const preprocessTexture = (callback) => {
+    const img = new Image();
+    img.onload = function() {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const size = Math.min(img.width, img.height);
+        canvas.width = size;
+        canvas.height = size;
+        
+        // Create circular mask
+        ctx.beginPath();
+        ctx.arc(size/2, size/2, size/2, 0, Math.PI*2);
+        ctx.closePath();
+        ctx.clip();
+        ctx.drawImage(img, 0, 0);
+        
+        callback(canvas.toDataURL());
+    };
+    img.src = chrome.runtime.getURL('textures/boulder.png');
+};
+
+let processedTexture = null;
+preprocessTexture((url) => {
+    processedTexture = url;
+    spawnBtn.disabled = false;
+});
+
 function spawnBoulder(x, y) {
+    if (!processedTexture) return;
+    
     const radius = 40;
     const boulder = Bodies.circle(x, y, radius, {
         restitution: 0.8,
-        friction: 0.1,
-        frictionAir: 0.01,
+        friction: 0.05,
+        frictionAir: 0.001,
         render: {
             sprite: {
-                texture: chrome.runtime.getURL('textures/boulder.png'),
-                xScale: (radius * 2) / 128, // Assuming texture is 128x128
+                texture: processedTexture,
+                xScale: (radius * 2) / 128,
                 yScale: (radius * 2) / 128
             }
         }
@@ -57,13 +91,40 @@ function spawnBoulder(x, y) {
     World.add(engine.world, boulder);
 }
 
-// Spawn boulder on click
+// Spawn mode controls
+spawnBtn.addEventListener('click', () => {
+    spawnModeActive = !spawnModeActive;
+    spawnBtn.textContent = spawnModeActive ? 'Cancel (Esc)' : 'Spawn Boulder';
+    preview.style.display = spawnModeActive ? 'block' : 'none';
+});
+
+// Preview circle follow mouse
+render.canvas.addEventListener('mousemove', (event) => {
+    if (spawnModeActive) {
+        const rect = render.canvas.getBoundingClientRect();
+        preview.style.left = `${event.clientX - rect.left - 40}px`;
+        preview.style.top = `${event.clientY - rect.top - 40}px`;
+    }
+});
+
+// Spawn on click when active
 render.canvas.addEventListener('mousedown', (event) => {
-    const rect = render.canvas.getBoundingClientRect();
-    spawnBoulder(
-        event.clientX - rect.left,
-        event.clientY - rect.top
-    );
+    if (spawnModeActive) {
+        const rect = render.canvas.getBoundingClientRect();
+        spawnBoulder(
+            event.clientX - rect.left,
+            event.clientY - rect.top
+        );
+    }
+});
+
+// Escape key handler
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        spawnModeActive = false;
+        spawnBtn.textContent = 'Spawn Boulder';
+        preview.style.display = 'none';
+    }
 });
 
 // Handle window resize
