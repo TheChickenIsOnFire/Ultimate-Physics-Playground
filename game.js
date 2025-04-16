@@ -38,44 +38,8 @@ const render = Render.create({
 });
 
 // Custom rendering for boulders
-// Custom rendering for boulders
-const ctx = canvas.getContext('2d');
-function renderBoulders() {
-  ctx.save();
-  boulders.forEach(boulder => {
-    if (!boulder.render.visible) return;
-    
-    const center = boulder.position;
-    const radius = boulder.circleRadius;
-    
-    // Create circular clipping path
-    ctx.beginPath();
-    ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
-    ctx.closePath();
-    ctx.clip();
-    
-    // Create pattern and fill circle
-    const pattern = ctx.createPattern(boulderImg, 'repeat');
-    ctx.fillStyle = pattern;
-    ctx.beginPath();
-    ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
-    ctx.fill();
-    
-    // Reset clipping
-    ctx.restore();
-    
-    // Add outline
-    ctx.beginPath();
-    ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = '#654321';
-    ctx.stroke();
-  });
-}
-
 // Set up renderer
 Render.run(render);
-Matter.Events.on(render, 'afterRender', renderBoulders);
 
 // Add ground and walls
 const ground = Bodies.rectangle(width/2, height + 50, width, 100, { isStatic: true });
@@ -123,9 +87,11 @@ document.getElementById('addCircle').addEventListener('click', () => {
       frictionStatic: 0.9,
       density: 0.005,
       render: {
-        visible: true,
-        fillStyle: 'transparent',
-        strokeStyle: 'transparent'
+        sprite: {
+          texture: 'textures/boulder.png',
+          xScale: 1,
+          yScale: 1
+        }
       },
       chamfer: { radius: radius * 0.1 }
     }
