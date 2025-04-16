@@ -38,9 +38,9 @@ const render = Render.create({
 });
 
 // Custom rendering for boulders
-Render.run(render);
+// Custom rendering for boulders
 const ctx = canvas.getContext('2d');
-render.canvas.matterRender.afterRender = function() {
+function renderBoulders() {
   ctx.save();
   boulders.forEach(boulder => {
     if (!boulder.render.visible) return;
@@ -71,7 +71,11 @@ render.canvas.matterRender.afterRender = function() {
     ctx.strokeStyle = '#654321';
     ctx.stroke();
   });
-};
+}
+
+// Set up renderer
+Render.run(render);
+Matter.Events.on(render, 'afterRender', renderBoulders);
 
 // Add ground and walls
 const ground = Bodies.rectangle(width/2, height + 50, width, 100, { isStatic: true });
