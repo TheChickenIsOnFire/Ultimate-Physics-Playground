@@ -37,9 +37,149 @@ const render = Render.create({
   }
 });
 
-// Custom rendering for boulders
 // Set up renderer
 Render.run(render);
+
+// Add optimized texture rendering
+Matter.Events.on(render, 'afterRender', function() {
+    const ctx = render.context;
+    
+    boulders.forEach(boulder => {
+        if (!boulder.render.visible || !boulderImg.complete) return;
+        
+        const center = boulder.position;
+        const radius = boulder.circleRadius;
+        
+        ctx.save();
+        
+        // Create clipping path
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
+        ctx.clip();
+        
+        // Draw scaled texture
+        const scale = (radius * 2) / boulderImg.width;
+        ctx.drawImage(
+            boulderImg,
+            center.x - radius,
+            center.y - radius,
+            radius * 2,
+            radius * 2
+        );
+        
+        ctx.restore();
+        
+        // Draw outline
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#654321';
+        ctx.stroke();
+    });
+});
+
+// Restore original boulder creation
+document.getElementById('addCircle').addEventListener('click', () => {
+  const radius = 20 + Math.random() * 20;
+  const boulder = Bodies.circle(
+    Math.random() * width,
+    50,
+    radius,
+    {
+      restitution: 0.3,
+      friction: 0.8,
+      render: {
+        visible: true,
+        fillStyle: 'transparent',
+        strokeStyle: 'transparent'
+      }
+    }
+  );
+  boulders.push(boulder);
+  World.add(world, boulder);
+});
+
+// Custom texture rendering with Matter.js events
+Matter.Events.on(render, 'afterRender', () => {
+  const ctx = render.context;
+  ctx.save();
+  
+  boulders.forEach(boulder => {
+    if (!boulder.render.visible) return;
+    
+    const center = boulder.position;
+    const radius = boulder.circleRadius;
+    
+    // Create circular clipping mask
+    ctx.beginPath();
+    ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.clip();
+    
+    // Draw texture with proper scaling
+    if (boulderImg.complete) {
+      const scale = (radius * 2) / boulderImg.width;
+      ctx.drawImage(
+        boulderImg,
+        center.x - radius,
+        center.y - radius,
+        radius * 2,
+        radius * 2
+      );
+    }
+    
+    // Reset clipping
+    ctx.restore();
+    
+    // Draw outline
+    ctx.beginPath();
+    ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#654321';
+    ctx.stroke();
+  });
+});
+
+// Custom texture rendering with Matter.js events
+Matter.Events.on(render, 'afterRender', () => {
+  const ctx = render.context;
+  ctx.save();
+  
+  boulders.forEach(boulder => {
+    if (!boulder.render.visible) return;
+    
+    const center = boulder.position;
+    const radius = boulder.circleRadius;
+    
+    // Create circular clipping mask
+    ctx.beginPath();
+    ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.clip();
+    
+    // Draw texture with proper scaling
+    if (boulderImg.complete) {
+      const scale = (radius * 2) / boulderImg.width;
+      ctx.drawImage(
+        boulderImg,
+        center.x - radius,
+        center.y - radius,
+        radius * 2,
+        radius * 2
+      );
+    }
+    
+    // Reset clipping
+    ctx.restore();
+    
+    // Draw outline
+    ctx.beginPath();
+    ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#654321';
+    ctx.stroke();
+  });
+});
 
 // Add ground and walls
 const ground = Bodies.rectangle(width/2, height + 50, width, 100, { isStatic: true });
@@ -87,11 +227,9 @@ document.getElementById('addCircle').addEventListener('click', () => {
       frictionStatic: 0.9,
       density: 0.005,
       render: {
-        sprite: {
-          texture: 'textures/boulder.png',
-          xScale: 1,
-          yScale: 1
-        }
+        visible: true,
+        fillStyle: 'transparent',
+        strokeStyle: 'transparent'
       },
       chamfer: { radius: radius * 0.1 }
     }
