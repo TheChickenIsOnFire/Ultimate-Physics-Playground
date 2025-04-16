@@ -10,11 +10,9 @@ const Engine = Matter.Engine,
       Body = Matter.Body;
 
 // Load boulder texture
-const boulderTexture = {
-  texture: 'textures/boulder.png',
-  xScale: 1,
-  yScale: 1
-};
+const boulderImg = new Image();
+boulderImg.src = 'textures/boulder.png';
+let boulders = [];
 
 // Create engine
 const engine = Engine.create();
@@ -34,9 +32,46 @@ const render = Render.create({
     width: width,
     height: height,
     wireframes: false,
-    background: 'white'
+    background: 'white',
+    showAngleIndicator: false
   }
 });
+
+// Custom rendering for boulders
+Render.run(render);
+const ctx = canvas.getContext('2d');
+render.canvas.matterRender.afterRender = function() {
+  ctx.save();
+  boulders.forEach(boulder => {
+    if (!boulder.render.visible) return;
+    
+    const center = boulder.position;
+    const radius = boulder.circleRadius;
+    
+    // Create circular clipping path
+    ctx.beginPath();
+    ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
+    ctx.closePath();
+    ctx.clip();
+    
+    // Create pattern and fill circle
+    const pattern = ctx.createPattern(boulderImg, 'repeat');
+    ctx.fillStyle = pattern;
+    ctx.beginPath();
+    ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
+    ctx.fill();
+    
+    // Reset clipping
+    ctx.restore();
+    
+    // Add outline
+    ctx.beginPath();
+    ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#654321';
+    ctx.stroke();
+  });
+};
 
 // Add ground and walls
 const ground = Bodies.rectangle(width/2, height + 50, width, 100, { isStatic: true });
@@ -84,17 +119,14 @@ document.getElementById('addCircle').addEventListener('click', () => {
       frictionStatic: 0.9,
       density: 0.005,
       render: {
-        sprite: {
-          texture: 'textures/boulder.png',
-          xScale: (radius * 2) / 100, // Scale texture to match diameter
-          yScale: (radius * 2) / 100,
-        },
-        strokeStyle: '#000000',
-        lineWidth: 1
+        visible: true,
+        fillStyle: 'transparent',
+        strokeStyle: 'transparent'
       },
-      chamfer: { radius: radius * 0.1 } // Slightly round edges
+      chamfer: { radius: radius * 0.1 }
     }
   );
+  boulders.push(boulder);
   World.add(world, boulder);
   console.log('Added boulder', boulder);
 });
@@ -111,13 +143,8 @@ document.getElementById('clearAll').addEventListener('click', () => {
 // Start the engine and renderer
 const runner = Matter.Runner.create();
 Matter.Runner.run(runner, engine);
-Render.run(render);
 
-// Debug: Add periodic console log of object positions
-setInterval(() => {
-  Composite.allBodies(world).forEach(body => {
-    if (!body.isStatic) {
-      console.log(`Body ${body.id} at (${body.position.x.toFixed(1)}, ${body.position.y.toFixed(1)}) velocity: (${body.velocity.x.toFixed(1)}, ${body.velocity.y.toFixed(1)})`);
-    }
-  });
-}, 1000);
+// Clear boulders when clearing all
+document.getElementById('clearAll').addEventListener('click', () => {
+  boulders = [];
+});
