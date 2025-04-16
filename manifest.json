@@ -1,0 +1,18 @@
+{
+  "name": "Ultimate Physics Playground",
+  "version": "1.0",
+  "manifest_version": 3,
+  "description": "A physics playground game using matter.js",
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  },
+  "permissions": [],
+  "offline_enabled": true
+}
