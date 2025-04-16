@@ -73,18 +73,26 @@ document.getElementById('addBox').addEventListener('click', () => {
 });
 
 document.getElementById('addCircle').addEventListener('click', () => {
+  const radius = 20 + Math.random() * 20;
   const boulder = Bodies.circle(
     Math.random() * width,
     50,
-    20 + Math.random() * 20,
+    radius,
     {
       restitution: 0.3,
       friction: 0.8,
       frictionStatic: 0.9,
       density: 0.005,
       render: {
-        sprite: boulderTexture
-      }
+        sprite: {
+          texture: 'textures/boulder.png',
+          xScale: (radius * 2) / 100, // Scale texture to match diameter
+          yScale: (radius * 2) / 100,
+        },
+        strokeStyle: '#000000',
+        lineWidth: 1
+      },
+      chamfer: { radius: radius * 0.1 } // Slightly round edges
     }
   );
   World.add(world, boulder);
