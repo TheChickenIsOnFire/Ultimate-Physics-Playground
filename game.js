@@ -5,11 +5,13 @@ const Engine = Matter.Engine,
       Bodies = Matter.Bodies,
       Composite = Matter.Composite,
       Mouse = Matter.Mouse,
-      MouseConstraint = Matter.MouseConstraint;
+      MouseConstraint = Matter.MouseConstraint,
+      World = Matter.World;
 
 // Create engine
 const engine = Engine.create();
 const world = engine.world;
+engine.gravity.y = 1; // Ensure gravity is enabled
 
 // Get canvas element
 const canvas = document.getElementById('gameCanvas');
@@ -55,18 +57,22 @@ document.getElementById('addBox').addEventListener('click', () => {
     Math.random() * width,
     50,
     50 + Math.random() * 50,
-    50 + Math.random() * 50
+    50 + Math.random() * 50,
+    { restitution: 0.8 }
   );
-  Composite.add(world, box);
+  World.add(world, box);
+  console.log('Added box', box);
 });
 
 document.getElementById('addCircle').addEventListener('click', () => {
   const circle = Bodies.circle(
     Math.random() * width,
     50,
-    20 + Math.random() * 20
+    20 + Math.random() * 20,
+    { restitution: 0.8 }
   );
-  Composite.add(world, circle);
+  World.add(world, circle);
+  console.log('Added circle', circle);
 });
 
 document.getElementById('clearAll').addEventListener('click', () => {
