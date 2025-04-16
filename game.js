@@ -79,5 +79,5 @@ document.getElementById('clearAll').addEventListener('click', () => {
 });
 
 // Start the engine and renderer
-Engine.run(engine);
+Matter.Runner.run(engine);
 Render.run(render);
