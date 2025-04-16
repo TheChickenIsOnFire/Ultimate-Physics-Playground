@@ -48,7 +48,7 @@ function spawnBoulder(x, y) {
         frictionAir: 0.01,
         render: {
             sprite: {
-                texture: chrome.runtime.getURL('/textures/boulder.png'),
+                texture: chrome.runtime.getURL('textures/boulder.png'),
                 xScale: (radius * 2) / 128, // Assuming texture is 128x128
                 yScale: (radius * 2) / 128
             }

@@ -14,9 +14,5 @@
     }
   },
   "permissions": ["storage"],
-  "offline_enabled": true,
-  "web_accessible_resources": [{
-    "resources": ["textures/*"],
-    "matches": ["<all_urls>"]
-  }]
+  "offline_enabled": true
 }
