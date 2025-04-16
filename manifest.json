@@ -8,11 +8,14 @@
     "48": "icon48.png",
     "128": "icon128.png"
   },
-  "app": {
-    "background": {
-      "scripts": ["background.js"]
-    }
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": "icon128.png"
   },
-  "permissions": [],
-  "offline_enabled": true
+  "permissions": ["storage"],
+  "offline_enabled": true,
+  "web_accessible_resources": [{
+    "resources": ["textures/*"],
+    "matches": ["<all_urls>"]
+  }]
 }

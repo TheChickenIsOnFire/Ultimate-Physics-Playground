@@ -1,23 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ultimate Physics Playground</title>
-  <link rel="stylesheet" href="styles.css">
+    <title>Ultimate Physics Playground</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { background: #f0f0f0; }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Ultimate Physics Playground</h1>
     <canvas id="gameCanvas"></canvas>
-    <div class="controls">
-      <button id="addBox">Add Box</button>
-      <button id="addCircle">Add Boulder</button>
-      <button id="clearAll">Clear All</button>
-    </div>
-  </div>
-
-  <script src="libs/matter.min.js"></script>
-  <script src="game.js"></script>
+    <script src="libs/matter.min.js"></script>
+    <script src="game.js"></script>
 </body>
 </html>
