@@ -6,7 +6,15 @@ const Engine = Matter.Engine,
       Composite = Matter.Composite,
       Mouse = Matter.Mouse,
       MouseConstraint = Matter.MouseConstraint,
-      World = Matter.World;
+      World = Matter.World,
+      Body = Matter.Body;
+
+// Load boulder texture
+const boulderTexture = {
+  texture: 'textures/boulder.png',
+  xScale: 1,
+  yScale: 1
+};
 
 // Create engine
 const engine = Engine.create();
@@ -65,14 +73,22 @@ document.getElementById('addBox').addEventListener('click', () => {
 });
 
 document.getElementById('addCircle').addEventListener('click', () => {
-  const circle = Bodies.circle(
+  const boulder = Bodies.circle(
     Math.random() * width,
     50,
     20 + Math.random() * 20,
-    { restitution: 0.8 }
+    {
+      restitution: 0.3,
+      friction: 0.8,
+      frictionStatic: 0.9,
+      density: 0.005,
+      render: {
+        sprite: boulderTexture
+      }
+    }
   );
-  World.add(world, circle);
-  console.log('Added circle', circle);
+  World.add(world, boulder);
+  console.log('Added boulder', boulder);
 });
 
 document.getElementById('clearAll').addEventListener('click', () => {
