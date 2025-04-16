@@ -36,7 +36,7 @@ const mouseConstraint = MouseConstraint.create(engine, {
 
 // Add objects to world
 World.add(engine.world, [ground, leftWall, rightWall, mouseConstraint]);
-Engine.run(engine);
+Matter.Runner.run(engine);
 Render.run(render);
 
 // Spawn circular boulder with texture
@@ -48,7 +48,7 @@ function spawnBoulder(x, y) {
         frictionAir: 0.01,
         render: {
             sprite: {
-                texture: 'textures/boulder.png',
+                texture: chrome.runtime.getURL('/textures/boulder.png'),
                 xScale: (radius * 2) / 128, // Assuming texture is 128x128
                 yScale: (radius * 2) / 128
             }
