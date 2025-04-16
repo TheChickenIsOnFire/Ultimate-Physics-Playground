@@ -85,5 +85,15 @@ document.getElementById('clearAll').addEventListener('click', () => {
 });
 
 // Start the engine and renderer
-Matter.Runner.run(engine);
+const runner = Matter.Runner.create();
+Matter.Runner.run(runner, engine);
 Render.run(render);
+
+// Debug: Add periodic console log of object positions
+setInterval(() => {
+  Composite.allBodies(world).forEach(body => {
+    if (!body.isStatic) {
+      console.log(`Body ${body.id} at (${body.position.x.toFixed(1)}, ${body.position.y.toFixed(1)}) velocity: (${body.velocity.x.toFixed(1)}, ${body.velocity.y.toFixed(1)})`);
+    }
+  });
+}, 1000);
