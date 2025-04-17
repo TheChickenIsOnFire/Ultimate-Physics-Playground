@@ -53,6 +53,7 @@ var boulderTexture = 'textures/boulder.png';
 
 // Function to create a boulder
 function createBoulder(x, y) {
+    console.log('Creating boulder at:', x, y);
     var circle = Bodies.circle(x, y, 20, {
         friction: 0.5,
         restitution: 0.5,
@@ -63,6 +64,7 @@ function createBoulder(x, y) {
         }
     });
     World.add(engine.world, circle);
+    console.log('Boulder created:', circle);
 }
 
 // Boulder Spawning
@@ -72,12 +74,14 @@ var isSpawningBoulders = false;
 spawnBoulderButton.addEventListener('click', function() {
     isSpawningBoulders = !isSpawningBoulders;
     spawnBoulderButton.textContent = isSpawningBoulders ? 'Stop Spawning' : 'Spawn Boulder';
+    console.log('Spawn boulder button clicked. isSpawningBoulders:', isSpawningBoulders);
 });
 
 render.canvas.addEventListener('mousedown', function(event) {
     if (isSpawningBoulders) {
         var x = event.offsetX || (event.pageX - render.canvas.offsetLeft);
         var y = event.offsetY || (event.pageY - render.canvas.offsetTop);
+        console.log('Mouse down event at:', x, y);
         createBoulder(x, y);
     }
 });

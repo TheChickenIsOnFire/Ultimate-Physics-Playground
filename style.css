@@ -5,31 +5,35 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: linear-gradient(to bottom, #87CEEB, #FFFFFF); /* Sky blue gradient */
-    font-family: sans-serif;
+    background: linear-gradient(to bottom, #ADD8E6, #F0F8FF); /* Light blue gradient */
+    font-family: 'Arial', sans-serif;
+    overflow: hidden; /* Prevent scrollbars */
 }
 
 canvas {
     width: 800px;
     height: 600px;
-    border: 2px solid #333;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    background-color: #f9f9f9;
+    border: none; /* Remove border */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+    background-color: #FFFFFF; /* White background */
+    border-radius: 10px; /* Rounded corners */
 }
 
 button {
     position: absolute;
     top: 20px;
     left: 20px;
-    padding: 10px 20px;
-    background-color: #4CAF50;
+    padding: 12px 24px;
+    background-color: #4285F4; /* Google blue */
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 18px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #3e8e41;
+    background-color: #2962FF; /* Darker blue */
 }
