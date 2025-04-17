@@ -2,7 +2,12 @@
 var Engine = Matter.Engine,
     Render = Matter.Render,
     World = Matter.World,
-    Bodies = Matter.Bodies;
+    Bodies = Matter.Bodies,
+    Mouse = Matter.Mouse,
+    MouseConstraint = Matter.MouseConstraint,
+    Composite = Matter.Composite,
+    Texture = PIXI.Texture,
+    Sprite = PIXI.Sprite;
 
 // create an engine
 var engine = Engine.create();
@@ -14,20 +19,75 @@ var render = Render.create({
     options: {
         width: 800,
         height: 600,
-        wireframes: false
+        wireframes: false,
+        background: 'transparent'
     }
 });
 
-// create two boxes and a ground
-var boxA = Bodies.rectangle(400, 200, 80, 80);
-var boxB = Bodies.rectangle(450, 50, 80, 80);
-var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+// Set gravity
+engine.world.gravity.y = 0.5;
 
-// add all of the bodies to the world
-World.add(engine.world, [boxA, boxB, ground]);
+// create runner
+var runner = Matter.Runner.create();
 
-// run the engine
-Matter.Runner.run(engine);
+// Run the engine
+Matter.Runner.run(runner, engine);
 
-// run the renderer
-Render.run(render);
+// add mouse control
+var mouse = Mouse.create(render.canvas),
+    mouseConstraint = MouseConstraint.create(engine, {
+        mouse: mouse,
+        constraint: {
+            stiffness: 0.2,
+            render: {
+                visible: false
+            }
+        }
+    });
+
+World.add(engine.world, mouseConstraint);
+
+// keep the mouse in sync with rendering
+render.mouse = mouse;
+
+// Boulder texture
+var boulderTexture = PIXI.Texture.fromImage('textures/boulder.png');
+
+// Function to create a boulder
+function createBoulder(x, y) {
+    var circle = Bodies.circle(x, y, 20, {
+        friction: 0.5,
+        restitution: 0.5,
+        render: {
+            sprite: {
+                texture: boulderTexture.baseTexture.imageUrl,
+                xScale: 0.5,
+                yScale: 0.5
+            }
+        }
+    });
+    World.add(engine.world, circle);
+}
+
+// Boulder Spawning
+var spawnBoulderButton = document.getElementById('spawnBoulderButton');
+var isSpawningBoulders = false;
+
+spawnBoulderButton.addEventListener('click', function() {
+    isSpawningBoulders = !isSpawningBoulders;
+    spawnBoulderButton.textContent = isSpawningBoulders ? 'Stop Spawning' : 'Spawn Boulder';
+});
+
+render.canvas.addEventListener('mousedown', function(event) {
+    if (isSpawningBoulders) {
+        var x = event.offsetX || (event.pageX - render.canvas.offsetLeft);
+        var y = event.offsetY || (event.pageY - render.canvas.offsetTop);
+        createBoulder(x, y);
+    }
+});
+
+// fit the render viewport to the scene
+Render.lookAt(render, {
+    min: { x: 0, y: 0 },
+    max: { x: 800, y: 600 }
+});
