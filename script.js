@@ -48,9 +48,6 @@ World.add(engine.world, mouseConstraint);
 // keep the mouse in sync with rendering
 render.mouse = mouse;
 
-// Boulder texture
-var boulderTexture = 'textures/boulder.png';
-
 // Function to create a boulder
 function createBoulder(x, y) {
     console.log('Creating boulder at:', x, y);
@@ -58,9 +55,7 @@ function createBoulder(x, y) {
         friction: 0.5,
         restitution: 0.5,
         render: {
-            sprite: {
-                texture: boulderTexture
-            }
+            fillStyle: 'brown' // Use a simple brown color
         }
     });
     World.add(engine.world, circle);
