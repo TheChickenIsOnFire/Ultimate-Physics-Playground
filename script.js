@@ -54,7 +54,7 @@ var boulderTexture = 'textures/boulder.png';
 // Function to create a boulder
 function createBoulder(x, y) {
     console.log('Creating boulder at:', x, y);
-    var circle = Bodies.circle(x, y, 20, {
+    var circle = Bodies.circle(x + Math.random() * 50 - 25, y + Math.random() * 50 - 25, 20, {
         friction: 0.5,
         restitution: 0.5,
         render: {

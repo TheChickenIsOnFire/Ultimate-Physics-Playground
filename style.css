@@ -11,12 +11,12 @@ body {
 }
 
 canvas {
-    width: 800px;
-    height: 600px;
+    width: 100%; /* Fill the entire width */
+    height: 100%; /* Fill the entire height */
     border: none; /* Remove border */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Stronger shadow */
     background-color: #FFFFFF; /* White background */
-    border-radius: 10px; /* Rounded corners */
+    border-radius: 0px; /* No rounded corners */
 }
 
 button {
