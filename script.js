@@ -27,7 +27,7 @@ var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
 World.add(engine.world, [boxA, boxB, ground]);
 
 // run the engine
-Engine.run(engine);
+Matter.Runner.run(engine);
 
 // run the renderer
 Render.run(render);
