@@ -5,9 +5,7 @@ var Engine = Matter.Engine,
     Bodies = Matter.Bodies,
     Mouse = Matter.Mouse,
     MouseConstraint = Matter.MouseConstraint,
-    Composite = Matter.Composite,
-    Texture = PIXI.Texture,
-    Sprite = PIXI.Sprite;
+    Composite = Matter.Composite;
 
 // create an engine
 var engine = Engine.create();
@@ -51,7 +49,7 @@ World.add(engine.world, mouseConstraint);
 render.mouse = mouse;
 
 // Boulder texture
-var boulderTexture = PIXI.Texture.fromImage('textures/boulder.png');
+var boulderTexture = 'textures/boulder.png';
 
 // Function to create a boulder
 function createBoulder(x, y) {
@@ -60,9 +58,7 @@ function createBoulder(x, y) {
         restitution: 0.5,
         render: {
             sprite: {
-                texture: boulderTexture.baseTexture.imageUrl,
-                xScale: 0.5,
-                yScale: 0.5
+                texture: boulderTexture
             }
         }
     });
