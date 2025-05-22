@@ -12,7 +12,7 @@ var engine = Engine.create();
 
 // create a renderer
 var render = Render.create({
-    element: document.body,
+    element: document.getElementById('gameCanvas'),
     engine: engine,
     options: {
         width: 800,
@@ -51,11 +51,15 @@ render.mouse = mouse;
 // Function to create a boulder
 function createBoulder(x, y) {
     console.log('Creating boulder at:', x, y);
-    var circle = Bodies.circle(x + Math.random() * 50 - 25, y + Math.random() * 50 - 25, 20, {
+    var circle = Bodies.circle(x, y, 20, {
         friction: 0.5,
         restitution: 0.5,
         render: {
-            fillStyle: 'brown' // Use a simple brown color
+            sprite: {
+                texture: 'textures/boulder.png',
+                xScale: 1,
+                yScale: 1
+            }
         }
     });
     World.add(engine.world, circle);
